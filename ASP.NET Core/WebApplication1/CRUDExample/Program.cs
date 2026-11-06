@@ -94,8 +94,17 @@ app.Logger.LogError("error-message");
 app.Logger.LogCritical("critical-message"); */
 
 app.UseHttpLogging();
-RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+}
+
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 app.Run();
+
+/// <summary>
+/// Provides the application entry point and supports access from the integration test project.
+/// </summary>
+public partial class Program { } // Make Program class partial so that it can be accessed from integration test project
