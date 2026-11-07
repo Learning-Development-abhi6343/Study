@@ -1,5 +1,4 @@
 ﻿using CsvHelper;
-using CsvHelper.Configuration;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +11,6 @@ using ServiceContractsxUnit;
 using ServiceContractsxUnit.DTO;
 using ServiceContractsxUnit.Enums;
 using ServicesxUnit.Helpers;
-using System.Globalization;
 
 namespace ServicesxUnit
 {
@@ -472,44 +470,35 @@ namespace ServicesxUnit
         public async Task<MemoryStream> GetPersonsCSV()
         {
             var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-
-            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
-
-            //var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, leaveOpen: true);
-            var csvWriter = new CsvWriter(streamWriter, csvConfiguration);
-
-            //csvWriter.WriteHeader<PersonResponse>();
-            //PersonName,Email,DateOfBirth,Age,Gender,Country,Address,ReceiveNewsLetters
-            csvWriter.WriteField(nameof(PersonResponse.PersonName));
-            csvWriter.WriteField(nameof(PersonResponse.Email));
-            csvWriter.WriteField(nameof(PersonResponse.DateOfBirth));
-            csvWriter.WriteField(nameof(PersonResponse.Age));
-            csvWriter.WriteField(nameof(PersonResponse.Gender));
-            csvWriter.WriteField(nameof(PersonResponse.Country));
-            csvWriter.WriteField(nameof(PersonResponse.Address));
-            csvWriter.WriteField(nameof(PersonResponse.ReceiveNewsLetters));
-
-            csvWriter.NextRecord();
-            //var persons = _db.Persons.Include(nameof(Person.Country)).Select(temp => temp.ToPersonResponse()).ToList();
-            //await csvWriter.WriteRecordsAsync(persons); //Write all persons to the CSV file
-            //var persons = await _personsRepository.GetAllPersons();
-            var persons = await GetAllPersons();
-            foreach (var person in persons)
+            using (var streamWriter = new StreamWriter(memoryStream, leaveOpen: true))
+            using (var csvWriter = CsvWriter.Create(streamWriter, leaveOpen: true))
             {
-                csvWriter.WriteField(person.PersonName);
-                csvWriter.WriteField(person.Email);
-                csvWriter.WriteField(person.DateOfBirth?.ToString("dd MMM yyyy"));
-                csvWriter.WriteField(person.Age);
-                csvWriter.WriteField(person.Gender);
-                csvWriter.WriteField(person.Country);
-                csvWriter.WriteField(person.Address);
-                csvWriter.WriteField(person.ReceiveNewsLetters);
-                csvWriter.NextRecord();
-                csvWriter.Flush();
+                csvWriter.WriteField(nameof(PersonResponse.PersonName));
+                csvWriter.WriteField(nameof(PersonResponse.Email));
+                csvWriter.WriteField(nameof(PersonResponse.DateOfBirth));
+                csvWriter.WriteField(nameof(PersonResponse.Age));
+                csvWriter.WriteField(nameof(PersonResponse.Gender));
+                csvWriter.WriteField(nameof(PersonResponse.Country));
+                csvWriter.WriteField(nameof(PersonResponse.Address));
+                csvWriter.WriteField(nameof(PersonResponse.ReceiveNewsLetters));
+                csvWriter.EndRecord();
+
+                var persons = await GetAllPersons();
+                foreach (var person in persons)
+                {
+                    csvWriter.WriteField(person.PersonName);
+                    csvWriter.WriteField(person.Email);
+                    csvWriter.WriteField(person.DateOfBirth?.ToString("dd MMM yyyy"));
+                    csvWriter.WriteField(person.Age);
+                    csvWriter.WriteField(person.Gender);
+                    csvWriter.WriteField(person.Country);
+                    csvWriter.WriteField(person.Address);
+                    csvWriter.WriteField(person.ReceiveNewsLetters);
+                    csvWriter.EndRecord();
+                }
             }
-            
-            memoryStream.Position = 0; //Reset the position of the memory stream to the beginning
+
+            memoryStream.Position = 0;
             return memoryStream;
         }
 
