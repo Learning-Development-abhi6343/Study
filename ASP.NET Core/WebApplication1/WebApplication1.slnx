@@ -4,6 +4,7 @@
   <Project Path="Controller/Controller.csproj" Id="33bd4ba0-4e88-47dd-8b66-c574b55b63bb" />
   <Project Path="CountriesApp/CountriesApp.csproj" Id="f2949eae-1c2a-4ced-b6bf-9e9810c5fc2f" />
   <Project Path="CRUDExample/CRUDExample.csproj" Id="b5317964-0d60-4f76-a3c8-0644352bbef8" />
+  <Project Path="CRUDExampleUpdated/CRUDExampleUpdated.csproj" Id="624d4512-2384-4dcc-ac1a-f65219a8c730" />
   <Project Path="CRUDTests/CRUDTests.csproj" Id="e745bd12-3b86-4b13-bda9-70c27c68b1df" />
   <Project Path="DependencyExample/DependencyInjectionExample.csproj" Id="b8b2c466-7e81-4e24-9401-d189e2e1e665" />
   <Project Path="Entities/Entities.csproj" Id="b6c66a20-1592-4626-ac93-714cf8431f1b" />
