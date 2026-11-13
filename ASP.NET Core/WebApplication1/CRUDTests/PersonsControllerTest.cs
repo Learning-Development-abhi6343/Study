@@ -31,6 +31,11 @@ namespace CRUDTests
         private readonly ICountriesService _countriesService;
 
         /// <summary>
+        /// Logger for diagnostic messages from the persons controller.
+        /// </summary>
+        private readonly ILogger<PersonsController> _logger;
+
+        /// <summary>
         /// Mock of the persons service used by controller tests.
         /// </summary>
         private readonly Mock<IPersonsService> _personsServiceMock;
@@ -39,6 +44,11 @@ namespace CRUDTests
         /// Mock used to configure and verify interactions with the countries service.
         /// </summary>
         private readonly Mock<ICountriesService> _countriesServiceMock;
+
+        /// <summary>
+        /// Mock logger for the persons controller.
+        /// </summary>
+        private readonly Mock<ILogger<PersonsController>> _loggerMock;
 
         /// <summary>
         /// Provides the fixture used by the test class.
@@ -55,9 +65,11 @@ namespace CRUDTests
 
             this._countriesServiceMock = new Mock<ICountriesService>();
             this._personsServiceMock = new Mock<IPersonsService>();
+            this._loggerMock = new Mock<ILogger<PersonsController>>();
 
             this._countriesService = this._countriesServiceMock.Object;
             this._personsService = this._personsServiceMock.Object;
+            this._logger = this._loggerMock.Object;
         }
 
         #region Index
@@ -72,7 +84,7 @@ namespace CRUDTests
             // Arrange
             var persons_response_list = this._fixture.Create<List<PersonResponse>>();
 
-            var personsController = new PersonsController(this._personsService, this._countriesService, Mock.Of<ILogger<PersonsController>>());
+            var personsController = new PersonsController(this._personsService, this._countriesService, this._logger);
 
             this._personsServiceMock.Setup(temp => temp.GetFilteredPersons(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(persons_response_list);
 
@@ -103,7 +115,7 @@ namespace CRUDTests
             var person_response = this._fixture.Create<PersonResponse>();
             List<CountryResponse> countries = this._fixture.Create<List<CountryResponse>>();
 
-            var personsController = new PersonsController(this._personsService, this._countriesService, Mock.Of<ILogger<PersonsController>>());
+            var personsController = new PersonsController(this._personsService, this._countriesService, this._logger);
 
             this._countriesServiceMock.Setup(temp => temp.GetAllCountries()).ReturnsAsync(countries);
             this._personsServiceMock.Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>())).ReturnsAsync(person_response);
@@ -134,7 +146,7 @@ namespace CRUDTests
             var person_response = this._fixture.Create<PersonResponse>();
             List<CountryResponse> countries = this._fixture.Create<List<CountryResponse>>();
 
-            var personsController = new PersonsController(this._personsService, this._countriesService, Mock.Of<ILogger<PersonsController>>());
+            var personsController = new PersonsController(this._personsService, this._countriesService, this._logger);
 
             this._countriesServiceMock.Setup(temp => temp.GetAllCountries()).ReturnsAsync(countries);
             this._personsServiceMock.Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>())).ReturnsAsync(person_response);

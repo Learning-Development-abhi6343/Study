@@ -68,10 +68,10 @@
             dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
             dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
 
-            //_countriesService = new CountriesService(dbContext);
-            //_countriesService = new CountriesService(null);
-            //_personService = new PersonsService(dbContext, _countriesService);
-            //_personService = new PersonsService(null);
+            /*this._countriesService = new CountriesService(dbContext);
+            this._countriesService = new CountriesService(null);
+            this._personService = new PersonsService(dbContext, _countriesService);
+            this._personService = new PersonsService(null);*/
 
             var diagnosticContextMock = new Mock<IDiagnosticContext>();
             var loggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<PersonsService>>();
@@ -766,67 +766,73 @@
 
 
         #region GetSortedPersons
-        //When we sort based on PersonName in DESC, it should return persons list in descending on PersonName
+
+        /// <summary>
+        /// Verifies that persons are sorted by name in descending order.
+        /// </summary>
+        /// <returns>A task representing the asynchronous test operation.</returns>
+        // When we sort based on PersonName in DESC, it should return persons list in descending on PersonName
         [Fact]
-        //public void GetSortedPersons_()
+
+        // public void GetSortedPersons_()
         public async Task GetSortedPersons()
         {
-            //Arrange
-            //var country_request_1 = new CountryAddRequest() { CountryName = "USA" };
-            //var country_request_2 = new CountryAddRequest() { CountryName = "India" };
+            // Arrange
+            /*var country_request_1 = new CountryAddRequest() { CountryName = "USA" };
+            /var country_request_2 = new CountryAddRequest() { CountryName = "India" };*/
 
-            var country_request_1 = _fixture.Create<CountryAddRequest>();
-            var country_request_2 = _fixture.Create<CountryAddRequest>();
+            var country_request_1 = this._fixture.Create<CountryAddRequest>();
+            var country_request_2 = this._fixture.Create<CountryAddRequest>();
 
-            var country_response_1 = await _countriesService.AddCountry(country_request_1);
-            var country_response_2 = await _countriesService.AddCountry(country_request_2);
+            var country_response_1 = await this._countriesService.AddCountry(country_request_1);
+            var country_response_2 = await this._countriesService.AddCountry(country_request_2);
 
-            //var person_request_1 = new PersonAddRequest()
-            //{
-            //    PersonName = "Smith",
-            //    Email = "smith@example.com",
-            //    Gender = GenderOptions.Male,
-            //    Address = "address of smith",
-            //    CountryID = country_response_1.CountryID,
-            //    DateOfBirth = DateTime.Parse("2002-05-06"),
-            //    ReceiveNewsLetters = true,
-            //};
+            /*var person_request_1 = new PersonAddRequest()
+            {
+                PersonName = "Smith",
+                Email = "smith@example.com",
+                Gender = GenderOptions.Male,
+                Address = "address of smith",
+                CountryID = country_response_1.CountryID,
+                DateOfBirth = DateTime.Parse("2002-05-06"),
+                ReceiveNewsLetters = true,
+            };*/
 
-            //var person_request_2 = new PersonAddRequest()
-            //{
-            //    PersonName = "Mary",
-            //    Email = "mary@example.com",
-            //    Gender = GenderOptions.Female,
-            //    Address = "address of mary",
-            //    CountryID = country_response_2.CountryID,
-            //    DateOfBirth = DateTime.Parse("2000-02-02"),
-            //    ReceiveNewsLetters = false,
-            //};
+            /*var person_request_2 = new PersonAddRequest()
+            {
+                PersonName = "Mary",
+                Email = "mary@example.com",
+                Gender = GenderOptions.Female,
+                Address = "address of mary",
+                CountryID = country_response_2.CountryID,
+                DateOfBirth = DateTime.Parse("2000-02-02"),
+                ReceiveNewsLetters = false,
+            };*/
 
-            //var person_request_3 = new PersonAddRequest()
-            //{
-            //    PersonName = "Rahman",
-            //    Email = "rahman@example.com",
-            //    Gender = GenderOptions.Female,
-            //    Address = "address of rahman",
-            //    CountryID = country_response_2.CountryID,
-            //    DateOfBirth = DateTime.Parse("1999-03-03"),
-            //    ReceiveNewsLetters = true,
-            //};
+            /*var person_request_3 = new PersonAddRequest()
+            {
+                PersonName = "Rahman",
+                Email = "rahman@example.com",
+                Gender = GenderOptions.Female,
+                Address = "address of rahman",
+                CountryID = country_response_2.CountryID,
+                DateOfBirth = DateTime.Parse("1999-03-03"),
+                ReceiveNewsLetters = true,
+            };*/
 
-            var person_request_1 = _fixture.Build<PersonAddRequest>()
+            var person_request_1 = this._fixture.Build<PersonAddRequest>()
                 .With(temp => temp.PersonName, "Smith")
                 .With(temp => temp.Email, "smith@example.com")
                 .With(temp => temp.CountryID, country_response_1.CountryID)
                 .Create();
 
-            var person_request_2 = _fixture.Build<PersonAddRequest>()
+            var person_request_2 = this._fixture.Build<PersonAddRequest>()
                 .With(temp => temp.PersonName, "Mary")
                 .With(temp => temp.Email, "mary@example.com")
                 .With(temp => temp.CountryID, country_response_2.CountryID)
                 .Create();
 
-            var person_request_3 = _fixture.Build<PersonAddRequest>()
+            var person_request_3 = this._fixture.Build<PersonAddRequest>()
                 .With(temp => temp.PersonName, "Rahman")
                 .With(temp => temp.Email, "rahman@example.com")
                 .With(temp => temp.CountryID, country_response_2.CountryID)
@@ -836,71 +842,79 @@
             var person_response_list_from_add = new List<PersonResponse>();
             foreach (var person_request in person_requests)
             {
-                var person_response = await _personService.AddPerson(person_request);
+                var person_response = await this._personService.AddPerson(person_request);
                 person_response_list_from_add.Add(person_response);
             }
 
-            //Print person_response_list_from_add
-            _testOutputHelper.WriteLine("All Persons:");
+            // Print person_response_list_from_add
+            this._testOutputHelper.WriteLine("All Persons:");
             foreach (var person_response_from_add in person_response_list_from_add)
             {
-                _testOutputHelper.WriteLine(person_response_from_add.ToString());
+                this._testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
-            var allPersons = await _personService.GetAllPersons();
 
-            //Act
-            var persons_list_from_sort = await _personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+            var allPersons = await this._personService.GetAllPersons();
 
-            //Print persons_list_from_search
-            _testOutputHelper.WriteLine($"Sorted Persons with SortBy {nameof(Person.PersonName)} in DESC order:");
+            // Act
+            var persons_list_from_sort = await this._personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+
+            // Print persons_list_from_sort
+            this._testOutputHelper.WriteLine($"Sorted Persons with SortBy {nameof(Person.PersonName)} in DESC order:");
             foreach (var person_response_from_get in persons_list_from_sort)
             {
-                _testOutputHelper.WriteLine(person_response_from_get.ToString());
+                this._testOutputHelper.WriteLine(person_response_from_get.ToString());
             }
-            //person_response_list_from_add = [..person_response_list_from_add.OrderByDescending(temp => temp.PersonName)];
 
-            //Assert
-            //for (var i = 0; i < person_response_list_from_add.Count; i++)
-            //{
-            //    Assert.Equal(person_response_list_from_add[i], persons_list_from_sort[i]);
-            //}
-            //persons_list_from_sort.Should().BeEquivalentTo(person_response_list_from_add);
+            // person_response_list_from_add = [..person_response_list_from_add.OrderByDescending(temp => temp.PersonName)];
+
+            // Assert
+            /*for (var i = 0; i < person_response_list_from_add.Count; i++)
+            {
+                Assert.Equal(person_response_list_from_add[i], persons_list_from_sort[i]);
+            }
+            persons_list_from_sort.Should().BeEquivalentTo(person_response_list_from_add);*/
 
             persons_list_from_sort.Should().BeInDescendingOrder(temp => temp.PersonName);
-
         }
+
+        /// <summary>
+        /// Verifies that persons are sorted in descending order by person name.
+        /// </summary>
+        /// <returns>A task representing the asynchronous test operation.</returns>
         [Fact]
         public async Task GetSortedPersons_ToBeSuccessful()
-        {   
-            //Arrange           
+        {
+            // Arrange
             var persons = new List<Person>()
             {
-                _fixture.Build<Person>().With(temp => temp.Email, "someone_1@example.com").With(temp => temp.Country, null as Country).Create(),
-                _fixture.Build<Person>().With(temp => temp.Email, "someone_2@example.com").With(temp => temp.Country, null as Country).Create(),
-                _fixture.Build<Person>().With(temp => temp.Email, "someone_3@example.com").With(temp => temp.Country, null as Country).Create(),
+                this._fixture.Build<Person>().With(temp => temp.Email, "someone_1@example.com").With(temp => temp.Country, null as Country).Create(),
+                this._fixture.Build<Person>().With(temp => temp.Email, "someone_2@example.com").With(temp => temp.Country, null as Country).Create(),
+                this._fixture.Build<Person>().With(temp => temp.Email, "someone_3@example.com").With(temp => temp.Country, null as Country).Create(),
             };
 
             var person_response_list_expected = persons.Select(temp => temp.ToPersonResponse());
-            _personsRepositoryMock.Setup(temp => temp.GetAllPersons()).ReturnsAsync(persons);
+            this._personsRepositoryMock.Setup(temp => temp.GetAllPersons()).ReturnsAsync(persons);
 
-            //Print person_response_list_expected
-            _testOutputHelper.WriteLine("All Persons:");
+            // Print person_response_list_expected
+            this._testOutputHelper.WriteLine("All Persons:");
             foreach (var person_response_from_add in person_response_list_expected)
             {
-                _testOutputHelper.WriteLine(person_response_from_add.ToString());
+                this._testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
-            var allPersons = await _personService.GetAllPersons();
 
-            //Act
-            var persons_list_from_sort = await _personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
-            //Print persons_list_from_search
-            _testOutputHelper.WriteLine($"Sorted Persons with SortBy {nameof(Person.PersonName)} in DESC order:");
+            var allPersons = await this._personService.GetAllPersons();
+
+            // Act
+            var persons_list_from_sort = await this._personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+
+            // Print persons_list_from_search
+            this._testOutputHelper.WriteLine($"Sorted Persons with SortBy {nameof(Person.PersonName)} in DESC order:");
             foreach (var person_response_from_get in persons_list_from_sort)
             {
-                _testOutputHelper.WriteLine(person_response_from_get.ToString());
+                this._testOutputHelper.WriteLine(person_response_from_get.ToString());
             }
 
-            //Assert
+            // Assert
             persons_list_from_sort.Should().BeInDescendingOrder(temp => temp.PersonName);
         }
         #endregion

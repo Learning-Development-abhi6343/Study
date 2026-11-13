@@ -112,24 +112,18 @@ namespace CRUDExampleUpdated.Filters.ActionFilters
         }
 
         /// <summary>
-        /// Gets or sets the order of the filter.
-        /// </summary>
-        public int Order { get; set; }
-
-        /// <summary>
         /// Called before and after the action method is executed to perform any pre-processing or post-processing logic.
         /// </summary>
         /// <param name="context">The action executing context.</param>
         /// <param name="next">The delegate to the next filter in the pipeline.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        // public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
              this._logger.LogInformation("{FilterName}.{MethodName} method - before called", nameof(ResponseHeaderActionFilter), nameof(this.OnActionExecutionAsync));
-            await next(); // Call the next action filter or action method in the pipeline
+             await next(); // Call the next action filter or action method in the pipeline
 
              this._logger.LogInformation("{FilterName}.{MethodName} method - after called", nameof(ResponseHeaderActionFilter), nameof(this.OnActionExecutionAsync));
-            context.HttpContext?.Response?.Headers?[this._key] = this._value;
+             context.HttpContext?.Response?.Headers?[this._key] = this._value;
         }
     }
 

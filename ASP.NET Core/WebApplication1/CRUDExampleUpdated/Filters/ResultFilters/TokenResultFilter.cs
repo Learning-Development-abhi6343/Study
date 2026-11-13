@@ -15,10 +15,7 @@ namespace CRUDExampleUpdated.Filters.ResultFilters
         /// This method is called after the action result has been executed. It can be used to perform any post-processing or cleanup tasks related to the action result.
         /// </summary>
         /// <param name="context">The result executed context.</param>
-        public void OnResultExecuted(ResultExecutedContext context)
-        {
-            
-        }
+        public void OnResultExecuted(ResultExecutedContext context) { }
 
         /// <summary>
         /// This method is called before the action result is executed. It appends an "Auth-Key" cookie with the value "A100" to the HTTP response.

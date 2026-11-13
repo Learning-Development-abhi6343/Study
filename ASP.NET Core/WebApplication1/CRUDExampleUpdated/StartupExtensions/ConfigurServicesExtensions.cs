@@ -19,10 +19,11 @@ namespace CRUDExampleUpdated.StartupExtensions
     public static class ConfigurServicesExtensions
     {
         /// <summary>
-        /// Configures the services required for the application, including logging, controllers, database context, repositories, and services.
+        /// Registers MVC, database, repository, application, action filter, and HTTP logging services.
         /// </summary>
-        /// <param name="services">The service collection to configure.</param>
-        /// <param name="configuration">The configuration instance.</param>
+        /// <param name="services">The service collection to which the application services are added.</param>
+        /// <param name="configuration">The application configuration containing the `DefaultConnection` connection string.</param>
+        /// <returns>The service collection with the application services registered.</returns>
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Logging
