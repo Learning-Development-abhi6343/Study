@@ -23,7 +23,8 @@ namespace CRUDExampleUpdated.Controllers
     /// </summary>
     [Route("[controller]")]
     [ResponseHeaderFilterFactory("MyKey-From-Controller", "MyValue-From-Controller", 3)]
-    [TypeFilter(typeof(HandleExceptionFilter))]
+
+    // [TypeFilter(typeof(HandleExceptionFilter))]
     [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
     public class PersonsController : Controller
     {
@@ -101,15 +102,16 @@ namespace CRUDExampleUpdated.Controllers
         /// <summary>
         /// Handles the request to create a new person based on the provided person add request.
         /// </summary>
-        /// <param name="personAddRequest">The person add request.</param>
         /// <param name="personRequest">The person add request.</param>
         /// <returns>The action result.</returns>
+
+        // <param name="personAddRequest">The person add request.</param>
         [Route("create")]
         [HttpPost]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
         [TypeFilter(typeof(FeatureDisabledResourceFilter), Arguments = new object[] { false })]
         public async Task<IActionResult> Create(PersonAddRequest personRequest)
-        {            
+        {
             await this._personsService.AddPerson(personRequest);
 
             // navigate user to "Index" action of this controller
@@ -123,6 +125,7 @@ namespace CRUDExampleUpdated.Controllers
         /// <returns>The action result.</returns>
         [Route("[action]/{personID}")]
         [HttpGet]
+        [TypeFilter(typeof(TokenResultFilter))]
         public async Task<IActionResult> Edit(Guid personID)
         {
             var personResponse = await this._personsService.GetPersonByPersonID(personID);
@@ -142,9 +145,10 @@ namespace CRUDExampleUpdated.Controllers
         /// <summary>
         /// Updates an existing person.
         /// </summary>
-        /// <param name="personUpdateRequest">The request containing the updated person information.</param>
         /// <param name="personRequest">The request containing the updated person information.</param>
         /// <returns>The action result.</returns>
+
+        // <param name="personUpdateRequest">The request containing the updated person information.</param>
         [Route("[action]/{personID}")]
         [HttpPost]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
@@ -156,7 +160,8 @@ namespace CRUDExampleUpdated.Controllers
             {
                 return this.RedirectToAction("Index");
             }
-            
+
+            // personRequest.PersonID = Guid.NewGuid();
             var updatedPerson = await this._personsService.UpdatePerson(personRequest);
             return this.RedirectToAction("Index");
         }

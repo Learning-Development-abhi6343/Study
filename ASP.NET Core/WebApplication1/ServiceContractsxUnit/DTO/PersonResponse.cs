@@ -1,14 +1,18 @@
-﻿using Entities;
-using ServiceContractsxUnit.Enums;
+﻿// <copyright file="PersonResponse.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ServiceContractsxUnit.DTO
 {
+    using Entities;
+    using ServiceContractsxUnit.Enums;
+
     /// <summary>
     /// Represents DTO class that is used as return type of most methods of Person service
     /// </summary>
     public class PersonResponse
     {
-        public Guid? PersonID { get; set; }
+        public Guid PersonID { get; set; }
         public Guid? CountryID { get; set; }
         public string? Country { get; set; }
         public string? PersonName { get; set; }

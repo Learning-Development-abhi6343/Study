@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Entities;
+using Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -416,7 +417,12 @@ namespace ServicesxUnit
             // var matchingPerson = _persons.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID) ?? throw new ArgumentException("Given person id doesn't exist");
             // var matchingPerson = _db.Persons.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID) ?? throw new ArgumentException("Given person id doesn't exist");
             // var matchingPerson = await _db.Persons.FirstOrDefaultAsync(temp => temp.PersonID == personUpdateRequest.PersonID) ?? throw new ArgumentException("Given person id doesn't exist");
-            var matchingPerson = await this._personsRepository.GetPersonByPersonID(personUpdateRequest.PersonID.Value);
+            var matchingPerson = await this._personsRepository.GetPersonByPersonID(personUpdateRequest.PersonID);
+            if (matchingPerson == null)
+            {
+                 // throw new ArgumentException("Given person id doesn't exist");
+                 throw new InvalidPersonIDException("Given person id doesn't exist");
+            }
 
             // update all details
             matchingPerson!.PersonName = personUpdateRequest.PersonName;
