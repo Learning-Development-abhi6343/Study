@@ -16,7 +16,7 @@ namespace Entities
         /// Gets or sets the person ID.
         /// </summary>
         [Key]
-        public Guid? PersonID { get; set; }
+        public Guid PersonID { get; set; }
 
         /// <summary>
         /// Gets or sets the country ID associated with the person.

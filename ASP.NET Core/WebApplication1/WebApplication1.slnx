@@ -9,6 +9,7 @@
   <Project Path="DependencyExample/DependencyInjectionExample.csproj" Id="b8b2c466-7e81-4e24-9401-d189e2e1e665" />
   <Project Path="Entities/Entities.csproj" Id="b6c66a20-1592-4626-ac93-714cf8431f1b" />
   <Project Path="EnvironmentExample/EnvironmentExample.csproj" Id="a07fad4b-5828-4201-88cc-a4266ea334ae" />
+  <Project Path="Exceptions/Exceptions.csproj" Id="df2b1fa1-9fba-4624-9ecd-e0e7dae5c77c" />
   <Project Path="LayoutViews/LayoutViews.csproj" Id="a3107c7b-6106-42e9-a147-cd94d02bf802" />
   <Project Path="LoginApp/LoginApp.csproj" Id="3f25eb7f-2363-4304-9d78-96b6b5ede379" />
   <Project Path="MathApp/MathApp.csproj" Id="e7c5e477-c88c-4a5c-8c1c-48793db0e92d" />

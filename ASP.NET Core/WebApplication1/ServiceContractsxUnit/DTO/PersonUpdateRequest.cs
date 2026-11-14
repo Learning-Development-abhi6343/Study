@@ -10,7 +10,7 @@ namespace ServiceContractsxUnit.DTO
     public class PersonUpdateRequest
     {
         [Required(ErrorMessage = "Person ID can't be blank")]
-        public Guid? PersonID { get; set; }
+        public Guid PersonID { get; set; }
 
         [Required(ErrorMessage = "Person Name can't be blank")]
         public string? PersonName { get; set; }
