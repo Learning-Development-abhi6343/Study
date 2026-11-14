@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using RepositoryContracts;
 using Serilog;
-using SerilogTimings;
 using ServiceContractsxUnit;
 using ServiceContractsxUnit.DTO;
 using ServiceContractsxUnit.Enums;
@@ -331,7 +330,7 @@ namespace ServicesxUnit
             };*/
 
             var matchingPersons = new List<Person>();
-            using (Operation.Time("Time taken to get filtered persons from database"))
+            using (SerilogTimings.Operation.Time("Time taken to get filtered persons from database"))
             {
                 matchingPersons = searchBy switch
                 {
