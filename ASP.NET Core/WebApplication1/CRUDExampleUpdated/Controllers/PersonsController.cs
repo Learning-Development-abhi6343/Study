@@ -31,7 +31,33 @@ namespace CRUDExampleUpdated.Controllers
         /// <summary>
         /// The service for managing persons.
         /// </summary>
-        readonly IPersonsService _personsService;
+
+        // readonly IPersonsService _personsService;
+
+        /// <summary>
+        /// The service for retrieving persons.
+        /// </summary>
+        private readonly IPersonsGetterService _personsGetterService;
+
+        /// <summary>
+        /// Service for adding persons.
+        /// </summary>
+        private readonly IPersonsAdderService _personsAdderService;
+
+        /// <summary>
+        /// Provides access to the service for updating person records.
+        /// </summary>
+        private readonly IPersonsUpdaterService _personsUpdaterService;
+
+        /// <summary>
+        /// The service used to delete persons.
+        /// </summary>
+        private readonly IPersonsDeleterService _personsDeleterService;
+
+        /// <summary>
+        /// Service used to sort persons.
+        /// </summary>
+        private readonly IPersonsSorterService _personsSorterService;
 
         /// <summary>
         /// The service for managing countries.
@@ -44,14 +70,22 @@ namespace CRUDExampleUpdated.Controllers
         readonly ILogger<PersonsController> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PersonsController"/> class with the specified services and logger.
+        /// Initializes a new instance of the <see cref="PersonsController"/> class.
         /// </summary>
-        /// <param name="personsService">The service for managing persons.</param>
-        /// <param name="countriesService">The service for managing countries.</param>
-        /// <param name="logger">The logger for logging information.</param>
-        public PersonsController(IPersonsService personsService, ICountriesService countriesService, ILogger<PersonsController> logger)
+        /// <param name="personsGetterService">The service for retrieving persons.</param>
+        /// <param name="personsAdderService">The service for adding persons.</param>
+        /// <param name="personsUpdaterService">The service for updating persons.</param>
+        /// <param name="personsDeleterService">The service for deleting persons.</param>
+        /// <param name="personsSorterService">The service for sorting persons.</param>
+        /// <param name="countriesService">The service for retrieving country information.</param>
+        /// <param name="logger">The logger for recording controller activity.</param>
+        public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsUpdaterService personsUpdaterService, IPersonsDeleterService personsDeleterService, IPersonsSorterService personsSorterService, ICountriesService countriesService, ILogger<PersonsController> logger)
         {
-            this._personsService = personsService;
+            this._personsGetterService = personsGetterService;
+            this._personsAdderService = personsAdderService;
+            this._personsUpdaterService = personsUpdaterService;
+            this._personsDeleterService = personsDeleterService;
+            this._personsSorterService = personsSorterService;
             this._countriesService = countriesService;
             this._logger = logger;
         }
@@ -77,9 +111,9 @@ namespace CRUDExampleUpdated.Controllers
 
             this._logger.LogDebug($"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
 
-            var persons = await this._personsService.GetFilteredPersons(searchBy, searchString);
+            var persons = await this._personsGetterService.GetFilteredPersons(searchBy, searchString);
 
-            var sortedPersons = await this._personsService.GetSortedPersons(persons, sortBy!, sortOrder);
+            var sortedPersons = await this._personsSorterService.GetSortedPersons(persons, sortBy!, sortOrder);
 
             return this.View(sortedPersons);
         }
@@ -104,15 +138,13 @@ namespace CRUDExampleUpdated.Controllers
         /// </summary>
         /// <param name="personRequest">The person add request.</param>
         /// <returns>The action result.</returns>
-
-        // <param name="personAddRequest">The person add request.</param>
         [Route("create")]
         [HttpPost]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
         [TypeFilter(typeof(FeatureDisabledResourceFilter), Arguments = new object[] { false })]
         public async Task<IActionResult> Create(PersonAddRequest personRequest)
         {
-            await this._personsService.AddPerson(personRequest);
+            await this._personsAdderService.AddPerson(personRequest);
 
             // navigate user to "Index" action of this controller
             return this.RedirectToAction("Index");
@@ -128,7 +160,7 @@ namespace CRUDExampleUpdated.Controllers
         [TypeFilter(typeof(TokenResultFilter))]
         public async Task<IActionResult> Edit(Guid personID)
         {
-            var personResponse = await this._personsService.GetPersonByPersonID(personID);
+            var personResponse = await this._personsGetterService.GetPersonByPersonID(personID);
             if (personResponse == null)
             {
                 return this.RedirectToAction("Index");
@@ -147,22 +179,20 @@ namespace CRUDExampleUpdated.Controllers
         /// </summary>
         /// <param name="personRequest">The request containing the updated person information.</param>
         /// <returns>The action result.</returns>
-
-        // <param name="personUpdateRequest">The request containing the updated person information.</param>
         [Route("[action]/{personID}")]
         [HttpPost]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
         [TypeFilter(typeof(TokenAuthorizationFilter))]
         public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
         {
-            var personResponse = await this._personsService.GetPersonByPersonID(personRequest.PersonID);
+            var personResponse = await this._personsGetterService.GetPersonByPersonID(personRequest.PersonID);
             if (personResponse == null)
             {
                 return this.RedirectToAction("Index");
             }
 
             // personRequest.PersonID = Guid.NewGuid();
-            var updatedPerson = await this._personsService.UpdatePerson(personRequest);
+            var updatedPerson = await this._personsUpdaterService.UpdatePerson(personRequest);
             return this.RedirectToAction("Index");
         }
 
@@ -175,7 +205,7 @@ namespace CRUDExampleUpdated.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid personID)
         {
-            var personResponse = await this._personsService.GetPersonByPersonID(personID);
+            var personResponse = await this._personsGetterService.GetPersonByPersonID(personID);
             if (personResponse == null)
             {
                 return this.RedirectToAction("Index");
@@ -193,13 +223,13 @@ namespace CRUDExampleUpdated.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(PersonUpdateRequest personUpdateRequest)
         {
-            var personResponse = await this._personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
+            var personResponse = await this._personsGetterService.GetPersonByPersonID(personUpdateRequest.PersonID);
             if (personResponse == null)
             {
                 return this.RedirectToAction("Index");
             }
 
-            await this._personsService.DeletePerson(personUpdateRequest.PersonID);
+            await this._personsDeleterService.DeletePerson(personUpdateRequest.PersonID);
             return this.RedirectToAction("Index");
         }
 
@@ -211,7 +241,7 @@ namespace CRUDExampleUpdated.Controllers
         public async Task<IActionResult> PersonsPDF()
         {
             // Get list of persons
-            var persons = await this._personsService.GetAllPersons();
+            var persons = await this._personsGetterService.GetAllPersons();
 
             // Return view as pdf
             return new ViewAsPdf("PersonsPDF", persons, this.ViewData)
@@ -228,7 +258,7 @@ namespace CRUDExampleUpdated.Controllers
         [Route("PersonsCSV")]
         public async Task<IActionResult> PersonsCSV()
         {
-            var memoryStream = await this._personsService.GetPersonsCSV();
+            var memoryStream = await this._personsGetterService.GetPersonsCSV();
             return this.File(memoryStream, "application/octet-stream", "persons.csv");
         }
 
@@ -239,7 +269,7 @@ namespace CRUDExampleUpdated.Controllers
         [Route("PersonsExcel")]
         public async Task<IActionResult> PersonsExcel()
         {
-            var memoryStream = await this._personsService.GetPersonsExcel();
+            var memoryStream = await this._personsGetterService.GetPersonsExcel();
             return this.File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "persons.xlsx");
         }
     }

@@ -53,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRUDExample\CRUDExample.csproj" />
+    <ProjectReference Include="..\CRUDExampleUpdated\CRUDExampleUpdated.csproj" />
     <ProjectReference Include="..\ServiceContractsxUnit\ServiceContractsxUnit.csproj" />
     <ProjectReference Include="..\ServicesxUnit\ServicesxUnit.csproj" />
   </ItemGroup>

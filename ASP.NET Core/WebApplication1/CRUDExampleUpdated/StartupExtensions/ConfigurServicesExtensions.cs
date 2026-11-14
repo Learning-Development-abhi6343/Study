@@ -74,6 +74,16 @@ namespace CRUDExampleUpdated.StartupExtensions
 
             services.AddScoped<ICountriesService, CountriesService>();
             services.AddScoped<IPersonsService, PersonsService>();
+
+            // services.AddScoped<IPersonsGetterService, PersonsGetterService>();
+            services.AddScoped<IPersonsGetterService, PersonsGetterServiceWithFewExcelFields>();
+            // services.AddScoped<IPersonsGetterService, PersonsGetterServiceChild>();
+            services.AddScoped<PersonsGetterService, PersonsGetterService>();
+            services.AddScoped<IPersonsAdderService, PersonsAdderService>();
+            services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
+            services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
+            services.AddScoped<IPersonsSorterService, PersonsSorterService>();
+
             services.AddTransient<PersonsListActionFilter>();
             services.AddTransient<ResponseHeaderActionFilter>();
             /* services.AddScoped<ICountriesService>(sp =>
