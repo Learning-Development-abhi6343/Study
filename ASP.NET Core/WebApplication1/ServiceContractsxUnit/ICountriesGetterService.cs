@@ -24,6 +24,6 @@ namespace ServiceContractsxUnit
         /// </summary>
         /// <param name="countryID">The identifier of the country, or null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the country response, or null.</returns>
-        Task<CountryResponse?> GetCountryByCopuntryID(Guid? countryID);
+        Task<CountryResponse?> GetCountryByCountryID(Guid? countryID);
     }
 }

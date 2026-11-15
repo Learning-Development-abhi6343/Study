@@ -34,7 +34,7 @@ namespace ServicesxUnit
         }
 
         /// <inheritdoc/>
-        public async Task<CountryResponse?> GetCountryByCopuntryID(Guid? countryID)
+        public async Task<CountryResponse?> GetCountryByCountryID(Guid? countryID)
         {
             if (countryID == null)
             {
