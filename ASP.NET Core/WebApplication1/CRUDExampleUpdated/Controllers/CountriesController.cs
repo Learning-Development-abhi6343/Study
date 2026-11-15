@@ -8,29 +8,36 @@ namespace CRUDExampleUpdated.Controllers
     using ServiceContractsxUnit;
 
     /// <summary>
-    /// Provides actions for displaying the country upload page and importing countries from an Excel file.
+    /// Provides endpoints for displaying the country upload view and importing countries from Excel workbooks.
     /// </summary>
     [Route("[controller]")]
     public class CountriesController : Controller
     {
         /// <summary>
-        /// Provides access to country-related operations.
+        /// Service used to retrieve country data.
         /// </summary>
-        readonly ICountriesService _countriesService;
+        private readonly ICountriesGetterService _countriesService;
+
+        /// <summary>
+        /// Provides access to the service for uploading countries.
+        /// </summary>
+        private readonly ICountriesUploaderService _countriesUploaderService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CountriesController"/> class.
         /// </summary>
-        /// <param name="countriesService">The service used to retrieve country data.</param>
-        public CountriesController(ICountriesService countriesService)
+        /// <param name="countriesService">The service for retrieving countries.</param>
+        /// <param name="countriesUploaderService">The service for uploading countries.</param>
+        public CountriesController(ICountriesGetterService countriesService, ICountriesUploaderService countriesUploaderService)
         {
             this._countriesService = countriesService;
+            this._countriesUploaderService = countriesUploaderService;
         }
 
         /// <summary>
-        /// Displays the Excel upload page.
+        /// Displays the Excel upload view.
         /// </summary>
-        /// <returns>The view result for the Excel upload page.</returns>
+        /// <returns>An action result that renders the view.</returns>
         [Route("UploadFromExcel")]
         public IActionResult UploadFromExcel()
         {
@@ -38,9 +45,9 @@ namespace CRUDExampleUpdated.Controllers
         }
 
         /// <summary>
-        /// Uploads country data from an Excel workbook.
+        /// Uploads countries from an Excel workbook.
         /// </summary>
-        /// <param name="excelFile">The Excel file to upload. The file must have the .xlsx extension.</param>
+        /// <param name="excelFile">The .xlsx file containing country data.</param>
         /// <returns>A view displaying the upload result or an error message.</returns>
         [Route("UploadFromExcel")]
         [HttpPost]
@@ -54,13 +61,13 @@ namespace CRUDExampleUpdated.Controllers
 
             if (!Path.GetExtension(excelFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
             {
-                this.ViewBag.ErrorMessage = "Please select a valid Excel file with .xlsx extension."; 
+                this.ViewBag.ErrorMessage = "Please select a valid Excel file with .xlsx extension."; // "UnSupported file. 'xlsx file is expected";
                 return this.View();
             }
 
             try
             {
-                int countriesAdded = await this._countriesService.UploadCountriesFromExcelFile(excelFile);
+                int countriesAdded = await this._countriesUploaderService.UploadCountriesFromExcelFile(excelFile);
                 this.ViewBag.Message = $"{countriesAdded} countries added successfully.";
             }
             catch (Exception ex)

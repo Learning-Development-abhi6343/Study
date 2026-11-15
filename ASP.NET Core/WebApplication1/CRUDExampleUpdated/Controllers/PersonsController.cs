@@ -60,9 +60,9 @@ namespace CRUDExampleUpdated.Controllers
         private readonly IPersonsSorterService _personsSorterService;
 
         /// <summary>
-        /// The service for managing countries.
+        /// Gets the service used to retrieve countries.
         /// </summary>
-        readonly ICountriesService _countriesService;
+        readonly ICountriesGetterService _countriesGetterService;
 
         /// <summary>
         /// The logger for logging information related to the controller's actions.
@@ -77,16 +77,16 @@ namespace CRUDExampleUpdated.Controllers
         /// <param name="personsUpdaterService">The service for updating persons.</param>
         /// <param name="personsDeleterService">The service for deleting persons.</param>
         /// <param name="personsSorterService">The service for sorting persons.</param>
-        /// <param name="countriesService">The service for retrieving country information.</param>
+        /// <param name="countriesGetterService">The service for retrieving country information.</param>
         /// <param name="logger">The logger for recording controller activity.</param>
-        public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsUpdaterService personsUpdaterService, IPersonsDeleterService personsDeleterService, IPersonsSorterService personsSorterService, ICountriesService countriesService, ILogger<PersonsController> logger)
+        public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsUpdaterService personsUpdaterService, IPersonsDeleterService personsDeleterService, IPersonsSorterService personsSorterService, ICountriesGetterService countriesGetterService, ILogger<PersonsController> logger)
         {
             this._personsGetterService = personsGetterService;
             this._personsAdderService = personsAdderService;
             this._personsUpdaterService = personsUpdaterService;
             this._personsDeleterService = personsDeleterService;
             this._personsSorterService = personsSorterService;
-            this._countriesService = countriesService;
+            this._countriesGetterService = countriesGetterService;
             this._logger = logger;
         }
 
@@ -128,7 +128,7 @@ namespace CRUDExampleUpdated.Controllers
         [ResponseHeaderFilterFactory("my-key", "my-value", 4)]
         public async Task<IActionResult> Create()
         {
-            var countries = await this._countriesService.GetAllCountries();
+            var countries = await this._countriesGetterService.GetAllCountries();
             this.ViewBag.Countries = countries.Select(c => new SelectListItem() { Text = c.CountryName, Value = c.CountryID.ToString() });
             return this.View();
         }
@@ -168,7 +168,7 @@ namespace CRUDExampleUpdated.Controllers
 
             var personUpdateRequest = personResponse.ToPersonUpdateRequest();
 
-            var countries = await this._countriesService.GetAllCountries();
+            var countries = await this._countriesGetterService.GetAllCountries();
             this.ViewBag.Countries = countries.Select(c => new SelectListItem() { Text = c.CountryName, Value = c.CountryID.ToString() });
 
             return this.View(personUpdateRequest);

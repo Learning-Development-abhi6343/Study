@@ -72,7 +72,8 @@ namespace CRUDExampleUpdated.StartupExtensions
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<IPersonsRepository, PersonsRepository>();
 
-            services.AddScoped<ICountriesService, CountriesService>();
+            services.AddScoped<ICountriesGetterService, CountriesGetterService>();
+            services.AddScoped<ICountriesUploaderService, CountriesUploaderService>();
             services.AddScoped<IPersonsService, PersonsService>();
 
             // services.AddScoped<IPersonsGetterService, PersonsGetterService>();
