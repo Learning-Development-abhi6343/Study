@@ -2,19 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using CRUDExampleUpdated.Filters.ActionFilters;
-using CRUDExampleUpdated.StartupExtensions;
 using CRUDExampleUpdated.Middlewares;
-using Entities;
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
-using Repositories;
-using RepositoryContracts;
+using CRUDExampleUpdated.StartupExtensions;
 using Rotativa.AspNetCore;
 using Serilog;
-using ServiceContractsxUnit;
-using ServicesxUnit;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureServices(builder.Configuration);
@@ -49,8 +40,3 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 app.Run();
-
-/// <summary>
-/// Provides the application entry point and supports access from the integration test project.
-/// </summary>
-public partial class Program { } // Make Program class partial so that it can be accessed from integration test project
