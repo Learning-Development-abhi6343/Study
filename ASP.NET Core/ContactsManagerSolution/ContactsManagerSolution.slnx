@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="ContactsManager.Core/ContactsManager.Core.csproj" />
+    <Project Path="ContactsManager.Infrastructure/ContactsManager.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="ContactsMagaer.ServiceTests/ContactsManager.ServiceTests.csproj" />
+    <Project Path="Contactsmanager.ControllerTests/ContactsManager.ControllerTests.csproj" />
+    <Project Path="ContactsManager.IntegrationTests/ContactsManager.IntegrationTests.csproj" />
+  </Folder>
+  <Project Path="ContactsManager.UI/ContactsManager.UI.csproj" />
+</Solution>
