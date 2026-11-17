@@ -4,6 +4,7 @@
 
 namespace ContactsManager.UI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace ContactsManager.UI.Controllers
         /// </summary>
         /// <returns>The error view.</returns>
         [Route("Error")]
+        [AllowAnonymous]
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = this.HttpContext.Features.Get<IExceptionHandlerPathFeature>();

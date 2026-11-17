@@ -11,9 +11,11 @@ namespace ContactsManager.UI.StartupExtensions
     using ContactsManager.Infrastructure.DbContexts;
     using ContactsManager.Infrastructure.Repositories;
     using ContactsManager.UI.Filters.ActionFilters;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.HttpLogging;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
@@ -34,6 +36,8 @@ namespace ContactsManager.UI.StartupExtensions
             {
                 var logger = services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
                 options.Filters.Add(new ResponseHeaderActionFilter(logger) { _key = "MyKey-From-Global", _value = "MyValue-From-Global", Order = 2 });
+
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -48,6 +52,19 @@ namespace ContactsManager.UI.StartupExtensions
                 options.Password.RequireDigit = false;
                 options.Password.RequiredUniqueChars = 3; // Eg: AB12AB
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>().AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
+            services.AddAuthorizationBuilder().SetFallbackPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()).AddPolicy("NotAuthorized", policy =>
+            {
+                policy.RequireAssertion(context =>
+                {
+                    return !context.User.Identity.IsAuthenticated;
+                });
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
 
             // Add services into IoC container
             services.AddScoped<ICountriesRepository, CountriesRepository>();

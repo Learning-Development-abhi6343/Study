@@ -5,6 +5,8 @@
 namespace ContactsManager.Core.DTO
 {
     using System.ComponentModel.DataAnnotations;
+    using ContactsManager.Core.Enums;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// Represents the data transfer object for user registration, containing properties for person name, email, phone number, password, and confirm password.
@@ -22,6 +24,7 @@ namespace ContactsManager.Core.DTO
         /// </summary>
         [Required(ErrorMessage = "Email can't be blank.")]
         [EmailAddress(ErrorMessage = "Email should be in a proper email address format")]
+        [Remote(action: "IsEmailAlreadyRegistered", controller: "Account", ErrorMessage = "Email is already in use")]
         public string Email { get; set; }
 
         /// <summary>
@@ -46,5 +49,7 @@ namespace ContactsManager.Core.DTO
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and Confirm Password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public UserTypeOptions UserType { get; set; } = UserTypeOptions.User;
     }
 }
