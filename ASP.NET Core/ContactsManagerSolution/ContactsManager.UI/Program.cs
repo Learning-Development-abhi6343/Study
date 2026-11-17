@@ -37,13 +37,7 @@ if (!builder.Environment.IsEnvironment("Test"))
 }
 
 app.UseStaticFiles();
-app.UseRouting();
-app.MapControllers();
+app.UseAuthentication();    // Add authentication middleware to the request pipeline // Reading Identity from cookie and setting it to HttpContext.User
+app.UseRouting();   // Identifying action method to be executed based on the request URL
+app.MapControllers();   // Execute the filter pipeline for the identified action method and execute the action method
 app.Run();
-
-/// <summary>
-/// Provides the application entry point and supports access from the integration test project.
-/// </summary>
-public partial class Program
-{
-} // Make Program class partial so that it can be accessed from integration test project
